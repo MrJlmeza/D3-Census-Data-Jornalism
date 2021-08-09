@@ -1,26 +1,14 @@
-
-// Before we code any data visualizations,
-// we need to at least set up the width, height and margins of the graph.
-// Note: I also added room for label text as well as text padding,
-// though not all graphs will need those specifications.
-
-// Grab the width of the containing box
+// SVG container dimensions
 var width = parseInt(d3.select("#scatter").style("width"));
+var height = width - width / 4;
 
-// Designate the height of the graph
-var height = width - width / 3.9;
-
-// Margin spacing for graph
+// wrapper margins
 var margin = 20;
-
-// space for placing words
 var labelArea = 110;
-
-// padding for the text at the bottom and left axes
 var tPadBot = 40;
 var tPadLeft = 40;
 
-// Create the actual canvas for the graph
+// Scatter plot
 var svg = d3
   .select("#scatter")
   .append("svg")
@@ -28,11 +16,9 @@ var svg = d3
   .attr("height", height)
   .attr("class", "chart");
 
-// Set the radius for each dot that will appear in the graph.
-// Note: Making this a function allows us to easily call
-// it in the mobility section of our code.
+// circle radius for each data point
 var circRadius;
-function crGet() {
+function defineRadius() {
   if (width <= 530) {
     circRadius = 5;
   }
@@ -40,21 +26,14 @@ function crGet() {
     circRadius = 10;
   }
 }
-crGet();
+defineRadius();
 
-// The Labels for our Axes
-
-// A) Bottom Axis
-// ==============
-
-// We create a group element to nest our bottom axes labels.
+//nest bottom axes labels using group element.
 svg.append("g").attr("class", "xText");
+
 // xText will allows us to select the group without excess code.
 var xText = d3.select(".xText");
 
-// We give xText a transform property that places it at the bottom of the chart.
-// By nesting this attribute in a function, we can easily change the location of the label group
-// whenever the width of the window changes.
 function xTextRefresh() {
   xText.attr(
     "transform",
@@ -67,8 +46,7 @@ function xTextRefresh() {
 }
 xTextRefresh();
 
-// Now we use xText to append three text SVG files, with y coordinates specified to space out the values.
-// 1. Poverty
+// xText X axis
 xText
   .append("text")
   .attr("y", -26)
@@ -76,7 +54,7 @@ xText
   .attr("data-axis", "x")
   .attr("class", "aText active x")
   .text("In Poverty (%)");
-// 2. Age
+
 xText
   .append("text")
   .attr("y", 0)
@@ -84,7 +62,7 @@ xText
   .attr("data-axis", "x")
   .attr("class", "aText inactive x")
   .text("Age (Median)");
-// 3. Income
+
 xText
   .append("text")
   .attr("y", 26)
@@ -93,10 +71,7 @@ xText
   .attr("class", "aText inactive x")
   .text("Household Income (Median)");
 
-// B) Left Axis
-// ============
-
-// Specifying the variables like this allows us to make our transform attributes more readable.
+//Y Axis
 var leftTextX = margin + tPadLeft;
 var leftTextY = (height + labelArea) / 2 - labelArea;
 
